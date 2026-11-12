@@ -1,0 +1,9 @@
+_base_: configs/et_sweep_b_recall.yaml
+experiment:
+  name: C_finehead
+  description: Recall objective plus fine-resolution ET/NCR residual head preserving WT/TC probabilities
+model:
+  et_head: true
+train:
+  lr: 1.0e-04
+  output: outputs/et_sweep/c_finehead

@@ -1,0 +1,5 @@
+_base_: configs/ablation_brats2020.yaml
+objective:
+  fm_weight: 0.0
+train:
+  output: outputs/component_ablation/wo_fm_loss

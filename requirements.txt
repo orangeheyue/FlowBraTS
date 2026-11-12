@@ -1,0 +1,10 @@
+torch>=2.1
+numpy>=1.24
+PyYAML>=6.0
+flow-matching>=1.0
+medpy>=0.5
+nibabel>=5.0
+pytest>=8.0
+scipy>=1.10,<1.17
+tensorboard>=2.12
+einops>=0.6

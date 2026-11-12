@@ -1,0 +1,52 @@
+amp: true
+amp_dtype: bfloat16
+data:
+  modal_order:
+  - flair
+  - t1ce
+  - t1
+  - t2
+  patch_size: 80
+  root: preproced_dataset/BraTS2018
+  split_dir: preproced_dataset/Common_Dataset_Split/BraTS/BRATS2018_Training_none_npy
+  year: 2018
+  split_index: 1
+device: cuda:0
+fast: true
+m2ftrans:
+  checkpoint: null
+  root: baselines/M2FTrans/M2FTrans_v1
+model:
+  flow_channels: 64
+  gate_temperature: 0.5
+  hidden_channels: 64
+  latent_channels: 256
+  nfe: 2
+  solver: euler
+  uncertainty_penalty: 1.0
+  utility_threshold: 0.0
+  version: v21
+  refinement_hidden: 32
+  task_scale: 0.25
+seed: 1037
+train:
+  backbone_lr: 0.0002
+  batch_size: 2
+  cpu_threads: 4
+  epochs: 300
+  grad_accumulation: 2
+  lr: 0.0001
+  max_grad_norm: 1.0
+  output: outputs/v21_brats2018
+  schedule_start_epoch: 0
+  stage: end_to_end
+  weight_decay: 0.0001
+  workers: 6
+validation:
+  auto_test: true
+  every: 50
+  patience: 3
+  selection: WT/TC/ET Dice primary, HD95 tie-break; 15 masks
+comparison:
+  checkpoint: null
+  status: same_dataset_baseline_required

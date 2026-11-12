@@ -1,0 +1,47 @@
+seed: 1037
+device: cuda:0
+amp: true
+data:
+  root: preproced_dataset/BraTS2020
+  split_dir: preproced_dataset/Common_Dataset_Split/BraTS/BRATS2020_Training_none_npy
+  patch_size: 80
+  modal_order:
+  - flair
+  - t1ce
+  - t1
+  - t2
+m2ftrans:
+  root: baselines/M2FTrans/M2FTrans_v1
+  checkpoint: pretrained_weights/M2FTrans/m2ftransv1_brats2020_80.pth
+model:
+  latent_channels: 256
+  flow_channels: 64
+  hidden_channels: 64
+  nfe: 2
+  solver: euler
+  gate_temperature: 0.5
+  utility_threshold: 0.0
+  uncertainty_penalty: 1.0
+  version: v21
+  refinement_hidden: 32
+  task_scale: 0.25
+train:
+  stage: end_to_end
+  epochs: 300
+  batch_size: 2
+  workers: 6
+  lr: 0.0001
+  backbone_lr: 1.0e-05
+  weight_decay: 0.0001
+  grad_accumulation: 2
+  output: outputs/v21_brats2020
+  cpu_threads: 4
+  max_grad_norm: 1.0
+  schedule_start_epoch: 0
+amp_dtype: bfloat16
+fast: true
+validation:
+  every: 50
+  patience: 3
+  auto_test: true
+  selection: WT/TC/ET Dice primary, HD95 tie-break; 15 masks

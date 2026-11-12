@@ -1,0 +1,15 @@
+_base_: configs/finetune_brats2020.yaml
+data:
+  year: 2018
+  root: preproced_dataset/BraTS2018
+  split_dir: preproced_dataset/Common_Dataset_Split/BraTS/BRATS2018_Training_none_npy
+  split_index: 1
+m2ftrans:
+  checkpoint: pretrained_weights/M2FTrans/m2ftransv1_brats2018_1_80.pth
+train:
+  batch_size: 5
+  workers: 4
+  output: outputs/finetune_brats2018/finetune
+comparison:
+  checkpoint: pretrained_weights/M2FTrans/m2ftransv1_brats2018_1_80.pth
+  cache_summary: null

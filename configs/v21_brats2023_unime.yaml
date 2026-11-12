@@ -1,0 +1,23 @@
+_base_: configs/v21_brats2021.yaml
+seed: 42
+data:
+  root: preproced_dataset/BraTS2023
+  split_dir: preproced_dataset/Common_Dataset_Split/BraTS/BRATS2023_Training_none_npy
+  year: 2023
+device: cuda:0
+train:
+  batch_size: 8
+  grad_accumulation: 2
+  output: outputs/BraTS2023_UniME
+experiment:
+  physical_gpu: 0
+  preprocessing: UniME BraTS2023
+  split_seed: 2023
+  training_seed: 42
+  initialization: random; no cross-split pretrained weights
+
+validation:
+  masks: [flairt1cet1t2]
+  selection: UniME full-modality mean WT/TC/ET/ETPro Dice
+  selection_config:
+    metric: unime_composite

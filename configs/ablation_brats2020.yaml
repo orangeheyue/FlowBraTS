@@ -1,0 +1,24 @@
+_base_: configs/finetune_brats2020.yaml
+seed: 1037
+device: cuda:0
+model:
+  disable_dmg: false
+  disable_rfm: false
+  disable_cfg: false
+objective:
+  fm_weight: 1.0
+  utility_weight: 0.2
+  safety_weight: 0.2
+  graph_sparse_weight: 0.01
+train:
+  epochs: 40
+  batch_size: 1
+  grad_accumulation: 4
+  workers: 2
+  output: outputs/component_ablation/full_reference
+validation:
+  every: 10
+  patience: 0
+  auto_test: true
+  selection: Five fixed representative masks; WT/TC/ET mean Dice primary, HD95 tie-break
+  masks: [flairt1cet1t2, t1cet1t2, flairt1t2, flair, t1c]

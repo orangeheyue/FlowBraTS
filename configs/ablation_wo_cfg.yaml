@@ -1,0 +1,7 @@
+_base_: configs/ablation_brats2020.yaml
+model:
+  disable_cfg: true
+objective:
+  utility_weight: 0.0
+train:
+  output: outputs/component_ablation/wo_cfg

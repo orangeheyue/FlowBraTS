@@ -1,0 +1,5 @@
+_base_: configs/ablation_brats2020.yaml
+objective:
+  graph_sparse_weight: 0.0
+train:
+  output: outputs/component_ablation/wo_graph_sparse

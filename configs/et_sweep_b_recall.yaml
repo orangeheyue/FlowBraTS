@@ -1,0 +1,14 @@
+_base_: configs/et_sweep_a_sampling.yaml
+experiment:
+  name: B_recall
+  description: Lesion sampling plus recall-oriented ET Tversky and mild CE weighting
+train:
+  output: outputs/et_sweep/b_recall
+loss:
+  region_weights: [1.0, 1.0, 1.5]
+  ce_weight: 0.2
+  ce_class_weights: [1.0, 1.0, 1.0, 1.5]
+  et_tversky_weight: 0.2
+  et_tversky_alpha: 0.3
+  et_tversky_beta: 0.7
+  et_fp_weight: 0.02

@@ -1,0 +1,53 @@
+seed: 1037
+device: cuda:0
+amp: true
+data:
+  root: preproced_dataset/BraTS2020
+  split_dir: preproced_dataset/Common_Dataset_Split/BraTS/BRATS2020_Training_none_npy
+  patch_size: 80
+  modal_order:
+  - flair
+  - t1ce
+  - t1
+  - t2
+m2ftrans:
+  root: baselines/M2FTrans/M2FTrans_v1
+  checkpoint: pretrained_weights/M2FTrans/m2ftransv1_brats2020_80.pth
+model:
+  latent_channels: 256
+  flow_channels: 64
+  hidden_channels: 64
+  nfe: 2
+  solver: euler
+  gate_temperature: 0.5
+  utility_threshold: 0.0
+  uncertainty_penalty: 1.0
+  version: v21
+  refinement_hidden: 32
+  task_scale: 0.25
+train:
+  stage: end_to_end
+  epochs: 40
+  batch_size: 4
+  workers: 6
+  lr: 5.0e-05
+  backbone_lr: 3.0e-06
+  weight_decay: 0.0001
+  grad_accumulation: 1
+  output: outputs/finetune_brats2020/finetune
+  cpu_threads: 4
+  max_grad_norm: 1.0
+  schedule_start_epoch: 0
+amp_dtype: bfloat16
+fast: true
+validation:
+  every: 10
+  patience: 2
+  auto_test: true
+  selection: Full-modality WT/TC/ET mean Dice primary; HD95 tie-break; all 15 combinations
+    only at final test
+  masks:
+  - flairt1cet1t2
+comparison:
+  checkpoint: pretrained_weights/M2FTrans/m2ftransv1_brats2020_80.pth
+  cache_summary: outputs/gpu0_brats2020_e2e_300/test_m2ftrans/summary.json

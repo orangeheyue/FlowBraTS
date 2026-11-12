@@ -1,0 +1,10 @@
+_base_: configs/ablation_brats2020.yaml
+model:
+  disable_rfm: true
+objective:
+  fm_weight: 0.0
+  utility_weight: 0.0
+  safety_weight: 0.0
+  graph_sparse_weight: 0.0
+train:
+  output: outputs/component_ablation/wo_rfm

@@ -1,0 +1,60 @@
+seed: 21037
+device: cuda:0
+amp: true
+data:
+  root: preproced_dataset/BraTS2020
+  split_dir: preproced_dataset/Common_Dataset_Split/BraTS/BRATS2020_Training_none_npy
+  patch_size: 80
+  modal_order: [flair, t1ce, t1, t2]
+m2ftrans:
+  root: baselines/M2FTrans/M2FTrans_v1
+  checkpoint: pretrained_weights/M2FTrans/m2ftransv1_brats2020_80.pth
+model:
+  latent_channels: 256
+  flow_channels: 64
+  hidden_channels: 64
+  nfe: 2
+  solver: euler
+  gate_temperature: 0.5
+  utility_threshold: 0.0
+  uncertainty_penalty: 1.0
+  version: v21
+  refinement_hidden: 32
+  task_scale: 0.25
+  # Increase only the ET semantic error injected into the task residual.
+  task_class_weights: [1.0, 1.0, 1.0, 1.5]
+loss:
+  region_weights: [1.0, 1.0, 2.0]
+  ce_weight: 0.2
+  ce_class_weights: [1.0, 1.0, 1.0, 2.0]
+  et_tversky_weight: 0.35
+  et_fp_weight: 0.25
+  et_fp_topk_fraction: 0.002
+train:
+  stage: end_to_end
+  epochs: 12
+  batch_size: 4
+  workers: 6
+  lr: 2.0e-05
+  backbone_lr: 1.0e-06
+  weight_decay: 0.0001
+  grad_accumulation: 1
+  output: outputs/finetune_brats2020_et
+  cpu_threads: 4
+  max_grad_norm: 1.0
+  schedule_start_epoch: 0
+amp_dtype: bfloat16
+fast: true
+validation:
+  every: 4
+  patience: 2
+  auto_test: true
+  selection: ET Dice primary with WT/TC guard; HD95 tie-break; all 15 combinations only at final test
+  selection_config:
+    metric: et_guarded
+    # No more than 0.5 percentage-point degradation from the v2.1 epoch-20 baseline.
+    minimum_dice: [0.9137799096, 0.8913072300]
+  masks: [flairt1cet1t2]
+comparison:
+  checkpoint: pretrained_weights/M2FTrans/m2ftransv1_brats2020_80.pth
+  cache_summary: outputs/finetune_brats2020/finetune/test_m2ftrans/summary.json

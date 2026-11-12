@@ -1,0 +1,33 @@
+_base_: configs/finetune_brats2020.yaml
+seed: 31037
+experiment:
+  name: A_sampling
+  description: Lesion-aware sampling with original Dice/BCE/CE objective
+data:
+  et_sampling:
+    et_probability: 0.55
+    tc_probability: 0.25
+    full_probability: 0.20
+model:
+  task_class_weights: [1.0, 1.0, 1.0, 1.0]
+train:
+  epochs: 8
+  scope: decoder
+  supervised_only: true
+  batch_size: 4
+  workers: 4
+  lr: 5.0e-05
+  backbone_lr: 5.0e-06
+  output: outputs/et_sweep/a_sampling
+validation:
+  every: 4
+  patience: 2
+  auto_test: false
+  initial_summary: outputs/finetune_brats2020/finetune/val_epoch_0020/summary.json
+  selection: Original ET Dice primary; WT/TC guards; ET HD95 tie break
+  selection_config:
+    metric: et_guarded
+    minimum_dice: [0.9137799096, 0.8913072300]
+  masks: [flairt1cet1t2]
+comparison:
+  cache_summary: outputs/finetune_brats2020/finetune/test_m2ftrans/summary.json
